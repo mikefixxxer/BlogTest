@@ -1,7 +1,9 @@
-﻿@model BlogSystem.Models.Blog
+﻿@model BlogSystem.Models.Blogs
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create " + HttpContextAccessor.HttpContext.Session.GetInt32("Id");
 }
 
 <h1>Create</h1>
@@ -19,32 +21,27 @@
             </div>
             <div class="form-group">
                 <label asp-for="blog_text" class="control-label"></label>
-                <input asp-for="blog_text" class="form-control" />
+                <textarea rows="20" asp-for="blog_text" class="form-control"></textarea>
                 <span asp-validation-for="blog_text" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user_name" class="control-label"></label>
-                <input asp-for="user_name" class="form-control" />
-                <span asp-validation-for="user_name" class="text-danger"></span>
+                
+                <input type="hidden" asp-for="user_id" value='@HttpContextAccessor.HttpContext.Session.GetInt32("Id")' class="form-control" />
+                <span asp-validation-for="user_id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="creation_date" class="control-label"></label>
-                <input asp-for="creation_date" class="form-control" />
+                
+                <input type="hidden" value="@DateTime.Now" asp-for="creation_date" class="form-control" />
                 <span asp-validation-for="creation_date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="approval_date" class="control-label"></label>
-                <input asp-for="approval_date" class="form-control" />
-                <span asp-validation-for="approval_date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="last_mod_date" class="control-label"></label>
-                <input asp-for="last_mod_date" class="form-control" />
+                
+                <input type="hidden" value="@DateTime.Now" asp-for="last_mod_date" class="form-control" />
                 <span asp-validation-for="last_mod_date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
+                
+                <input type="hidden" value="1" asp-for="status" class="form-control" />
                 <span asp-validation-for="status" class="text-danger"></span>
             </div>
             <div class="form-group">

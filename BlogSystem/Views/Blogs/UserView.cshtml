@@ -1,0 +1,109 @@
+﻿@model BlogSystem.Models.Blogs
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Blog</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.blog_title)
+            Title
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.blog_title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.blog_text)
+
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.blog_text)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.user_id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.user_id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.creation_date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.creation_date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.approval_date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.approval_date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.last_mod_date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.last_mod_date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BlogStatus.status_name)
+        </dd>
+        <dt class="col-sm-2">Create a comment:</dt>
+        <dd class="col-sm-10">
+            <form asp-action="CreateComment">
+
+                <label title="Label_Name" class="control-label">Name</label>
+                <input type="text" name="alt_name" id="alt_name" class="form-control" />
+                <label title="Label_Comment" class="control-label">Comment</label>
+                <textarea rows="5" name="comment" id="comment" class="form-control"></textarea>
+                <span asp-validation-for="blog_text" class="text-danger"></span>
+                <input name="blog_id" id="blog_id" type="hidden" value="@Html.DisplayFor(model => model.id)" />
+                <input name="comment_date" id="comment_date" type="hidden" value="@DateTime.Now" />
+                @* Add user id if the user is logged in, else adds 0*@
+                @if (HttpContextAccessor.HttpContext.Session.GetInt32("Id") != null)
+                {
+                    <input name="user_id" id="user_id" type="hidden" value="@HttpContextAccessor.HttpContext.Session.GetInt32("Id")" />
+                }
+                else
+                {
+                    <input name="user_id" id="user_id" type="hidden" value="0" />
+                }
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+
+            </form>
+        </dd>
+        <dt class="col-sm-2">Comments</dt>
+        <dd class="col-sm-10">
+            <table width="100%">
+                <tr>
+                    <th width="15%">Name</th>
+                    <th width="25%">Date</th>
+                    <th width="60%">Comment</th>
+                </tr>
+                @* Shows all comments of a Blog *@
+                @foreach (var i in Model.Comments)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(m => i.alt_name)</td>
+                    <td>@Html.DisplayFor(m => i.comment_date)</td>
+                    <td>@Html.DisplayFor(m => i.comment)</td>
+                </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

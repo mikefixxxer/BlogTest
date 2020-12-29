@@ -18,16 +18,19 @@ namespace BlogSystem.Controllers
             _logger = logger;
         }
 
+        //Shows default index view (Empty)
         public IActionResult Index()
         {
             return View();
         }
 
+        //Shows default privacy view (Default)
         public IActionResult Privacy()
         {
             return View();
         }
 
+        //Shows error Page (Default)
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -1,65 +1,101 @@
 ﻿@model IEnumerable<BlogSystem.Models.Blogs>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                User
-            </th>
-            <th>
-                Creation date
-            </th>
-            <th>
-                Approval date
-            </th>
-            <th>
-                Last modification
-            </th>
-            <th>
-                Status
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.blog_title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.user_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.creation_date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.approval_date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.last_mod_date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-            </td>
-        </tr>
+@* Shows create option just for logged in users *@
+@if (HttpContextAccessor.HttpContext.Session.GetString("Profile") != null)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
 }
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    User
+                </th>
+                <th>
+                    Creation date
+                </th>
+                <th>
+                    Approval date
+                </th>
+                <th>
+                    Last modification
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @* 1. Shows all Blogs list for Editors 
+                   2. Shows all Blogs that are approved
+                   3. Shows Blogs for logged in writer profiles that are Pending for approval or rejected*@
+                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Profile") == 1) || (item.status == 2) ||
+                   ((HttpContextAccessor.HttpContext.Session.GetInt32("Profile") == 2) && ((item.status == 1) || (item.status == 3))))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.blog_title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.user_id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.creation_date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.approval_date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.last_mod_date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.status)
+                        </td>
+                        <td>
+                            @* Shows options for logged in users
+                               1. All options (CRUD) for Editor
+                               2. Edit and view detail for Writer
+                               3. View detail for not logged users*@
+                            @if (HttpContextAccessor.HttpContext.Session.GetInt32("Profile") != null)
+                            {
+                                if ((HttpContextAccessor.HttpContext.Session.GetInt32("Profile") == 1) ||
+                                        ((HttpContextAccessor.HttpContext.Session.GetInt32("Profile") == 2) &&
+                                        (item.user_id == HttpContextAccessor.HttpContext.Session.GetInt32("Id")) && 
+                                        item.status != 1 ))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.id">Edit |</a>
+                                }
+                                <a asp-action="UserView" asp-route-id="@item.id"> User View </a>
+                                @if (HttpContextAccessor.HttpContext.Session.GetInt32("Profile") == 1)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.id">| Delete </a>
+                                }
+
+                            }
+                            else
+                            {
+                                <a asp-action="UserView" asp-route-id="@item.id"> User View </a>
+                            }
+
+                        </td>
+
+                    </tr>
+                    }
+                }
+        </tbody>
+    </table>

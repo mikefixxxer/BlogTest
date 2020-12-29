@@ -1,22 +1,19 @@
-﻿@model BlogSystem.Models.LoginModel
-
+﻿@model BlogSystem.Models.Users
 
 @{
     ViewData["Title"] = "Login";
 }
 
-
-
 <h1>Login</h1>
-
 
 @using (Html.BeginForm("Welcome", "login", FormMethod.Post))
 {
     <label for="User">User</label>
-    @Html.TextBoxFor(m => m.User)
-    <label for= "Password">Password</label>
-    @Html.TextBoxFor(m => m.Password)
+    @Html.TextBoxFor(m => m.user_name)
+    <label for="Password">Password</label>
+    @Html.PasswordFor(m => m.password)
 
-    <input type = "submit" id = "submit" value = "Login" />
+    <input type="submit" id="submit" value="Login" />
 }
+<p>@Html.ValidationMessage("LogOnError")</p>
 

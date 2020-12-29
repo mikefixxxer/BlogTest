@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,8 +26,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @* Shows user and blogs link to logged in users, else shows login link*@
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="">User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="">Blogs</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
+                @* Shows sign out link if the user is logged in*@
+                @if (HttpContextAccessor.HttpContext.Session.GetString("Username") != null)
+                {
+                    <p>Welcome @HttpContextAccessor.HttpContext.Session.GetString("Username")</p>
+                    <p> <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="_SignOut">Sign out</a></p>
+
+                }
             </div>
         </nav>
     </header>

@@ -15,7 +15,8 @@ namespace BlogSystem.Data
         }
 
         public DbSet<Blogs> Blogs { get; set; }
-
+        public DbSet<Users> Users { get; set; }
+        public DbSet<Comments> Comments { get; set; }
 
     }
 }

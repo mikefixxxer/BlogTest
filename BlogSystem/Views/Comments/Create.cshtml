@@ -1,0 +1,52 @@
+﻿@model BlogSystem.Models.Comments
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Comments</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="blog_id" class="control-label"></label>
+                <select asp-for="blog_id" class ="form-control" asp-items="ViewBag.blog_id"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="alt_name" class="control-label"></label>
+                <input asp-for="alt_name" class="form-control" />
+                <span asp-validation-for="alt_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="user_id" class="control-label"></label>
+                <input asp-for="user_id" class="form-control" />
+                <span asp-validation-for="user_id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="comment" class="control-label"></label>
+                <input asp-for="comment" class="form-control" />
+                <span asp-validation-for="comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <input type="hidden" value="@DateTime.Now" asp-for="comment_date" class="form-control" />
+                <span asp-validation-for="comment_date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

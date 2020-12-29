@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlogSystem.Models
 {
+    // Model for login
     public class LoginModel
     {
-        ///<summary>
-        /// Gets or sets PersonId.
-        ///</summary>
+
+        [Required]
         public string User { get; set; }
 
-        ///<summary>
-        /// Gets or sets Name.
-        ///</summary>
+        [Required]
         public string Password { get; set; }
 
     }

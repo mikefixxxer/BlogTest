@@ -1,4 +1,6 @@
-﻿@model BlogSystem.Models.Blog
+﻿@model BlogSystem.Models.Blogs
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
 
 @{
     ViewData["Title"] = "Edit";
@@ -20,34 +22,44 @@
             </div>
             <div class="form-group">
                 <label asp-for="blog_text" class="control-label"></label>
-                <input asp-for="blog_text" class="form-control" />
+                <textarea rows="20" asp-for="blog_text" class="form-control" ></textarea>
                 <span asp-validation-for="blog_text" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user_name" class="control-label"></label>
-                <input asp-for="user_name" class="form-control" />
-                <span asp-validation-for="user_name" class="text-danger"></span>
+                <label asp-for="user_id" class="control-label"></label>
+                <input asp-for="user_id" class="form-control" disabled />
+                <input type="hidden" asp-for="user_id" />
+                <span asp-validation-for="user_id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="creation_date" class="control-label"></label>
-                <input asp-for="creation_date" class="form-control" />
+                <input asp-for="creation_date" class="form-control" disabled />
+                <input type="hidden" asp-for="creation_date" />
                 <span asp-validation-for="creation_date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="approval_date" class="control-label"></label>
-                <input asp-for="approval_date" class="form-control" />
+                <input asp-for="approval_date" class="form-control" disabled/>
                 <span asp-validation-for="approval_date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="last_mod_date" class="control-label"></label>
-                <input asp-for="last_mod_date" class="form-control" />
+                <input asp-for="last_mod_date" class="form-control" disabled/>
                 <span asp-validation-for="last_mod_date" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
-                <span asp-validation-for="status" class="text-danger"></span>
-            </div>
+            @*Shows status option just to Editor profiles*@
+            @if (HttpContextAccessor.HttpContext.Session.GetInt32("Profile") == 1)
+            {
+                <div class="form-group">
+                    <label asp-for="status" class="control-label"></label>
+                    <select asp-for="status" class="form-control">
+                        <option value="1">Pending</option>
+                        <option value="2">Enabled</option>
+                        <option value="3">Rejected</option>
+                    </select>
+                    <span asp-validation-for="status" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

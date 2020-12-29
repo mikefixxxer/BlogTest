@@ -29,6 +29,14 @@ namespace BlogSystem
 
             services.AddDbContext<BlogSystemContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BlogSystemContext")));
+
+            
+            //Setup session for 30 minutes
+            services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
+            services.AddMvc();
+            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddHttpContextAccessor();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,12 +59,17 @@ namespace BlogSystem
 
             app.UseAuthorization();
 
+            app.UseSession();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Blogs}/{action=Index}/{id?}");    
             });
+
+
+
         }
     }
 }
