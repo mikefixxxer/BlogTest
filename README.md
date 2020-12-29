@@ -9,7 +9,7 @@ Microsoft.VisualStudio.Web.CodeGeneration
 
 Total develop time: 32 hours
 
-Database backup added at DBBlog.bak
+Database backup added at BDBlog.bak
 
 Users: (passwords are the same user)
 Editor-> mjimenez
